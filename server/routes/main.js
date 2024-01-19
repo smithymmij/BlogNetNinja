@@ -13,7 +13,7 @@ router.get('', async (req, res) => {
             description: "Simple Blog created with NodeJs, Express & MongoDb."
         }
 
-        let perPage = 10;
+        let perPage = 6;
         let page = req.query.page || 1;
 
         const data = await Post.aggregate([ { $sort: { createdAt: -1 } } ])
@@ -68,7 +68,8 @@ router.get('/post/:id', async (req, res) => {
 
         const locals = {
             title: data.title,
-            description: "Simple Blog created with NodeJs, Express & MongoDb."
+            description: "Simple Blog created with NodeJs, Express & MongoDb.",
+            currentRoute: `/post/${slug}`
         }
 
 
@@ -118,6 +119,11 @@ router.post('/search', async (req, res) => {
 });
 
 
+router.get('/about', (req, res) => {
+    res.render('about', {
+        currentRoute: '/about'
+    })
+})
 
 
 
@@ -167,6 +173,8 @@ router.post('/search', async (req, res) => {
 // }
 
 // insertPostData();
+
+
 
 
 module.exports = router;
