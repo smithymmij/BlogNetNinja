@@ -17,17 +17,39 @@ const jwtSecret = process.env.JWT_SECRET;
 const authMiddleware = (req, res, next) => {
     const token = req.cookies.token;
 
-    if(!token) {
-        return res.status(401).json( { message: Unauthorized } );
+    if (!token) {
+        return res.redirect('/admin'); // Redirecionar para a página de login
     }
+
+    //if(!token) {
+    //    return res.status(401).json( { message: Unauthorized } );
+    //}
 
     try {
         const decoded = jwt.verify(token, jwtSecret);
         req.userId = decoded.userId;
+
+        // Verificar se o token está prestes a expirar
+        const now = Math.floor(Date.now() / 1000); // Tempo atual em segundos
+        const expiresAt = decoded.exp; // Tempo de expiração do token
+        const timeRemaining = expiresAt - now;
+
+        
+        if (timeRemaining < 60) {
+            // Se o token estiver prestes a expirar (menos de 60 segundos restantes), redirecione para a página de login
+            return res.redirect('/admin');
+        }
+
+
         next();
-    }   catch(error) {
-        return res.status(401).json( { message: Unauthorized } );
+
+    } catch (error) {
+        return res.redirect('/admin'); // Redirecionar para a página de login em caso de token inválido
     }
+
+    //}   catch(error) {
+    //    return res.status(401).json( { message: Unauthorized } );
+   // }
 
 }
 
@@ -64,23 +86,57 @@ router.post('/admin', async (req, res) => {
         
         const user = await User.findOne( { username } );
 
+        //Minhas Alterações
         if(!user) {
-            return res.status(401).json( { message: 'Invalid credentials' } );
+            // Renderizar a página de login com uma mensagem de erro
+            const locals = {
+                title: "Admin",
+                description: "Simple Blog created with NodeJs, Express & MongoDb.",
+                errorMessage: 'User not found. Please check your credentials.'
+            };
+            return res.render('admin/index', { locals, layout: adminLayout });
         }
+
+        //if(!user) {
+        //    return res.status(401).json( { message: 'Invalid credentials' } );
+        //}
         
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
+        //Minhas Alterações
         if(!isPasswordValid) {
-            return res.status(401).json( { message: 'Invalid credentials' } );
+            // Renderizar a página de login com uma mensagem de erro
+            const locals = {
+                title: "Admin",
+                description: "Simple Blog created with NodeJs, Express & MongoDb.",
+                errorMessage: 'Invalid password. Please check your credentials.'
+            };
+            return res.render('admin/index', { locals, layout: adminLayout });
         }
+
+        //if(!isPasswordValid) {
+        //    return res.status(401).json( { message: 'Invalid credentials' } );
+        //}
         
         const token = jwt.sign({ userId: user._id }, jwtSecret)
         res.cookie('token', token, { httpOnly: true });
         res.redirect('/dashboard');
 
+    //Minhas Alterações    
     } catch (error){
         console.log(error);
+        // Renderizar a página de login com uma mensagem de erro genérica
+        const locals = {
+            title: "Admin",
+            description: "Simple Blog created with NodeJs, Express & MongoDb.",
+            errorMessage: 'An error occurred. Please try again later.'
+        };
+        return res.render('admin/index', { locals, layout: adminLayout });
     }
+
+    //} catch (error){
+    //    console.log(error);
+    //}
 });
 
 
@@ -253,23 +309,47 @@ router.post('/register', async (req, res) => {
         
         try {
             const user = await User.create({ username, password:hashedPassword });
-            res.status(201).json({ message: 'User Created', user });  
-        } catch (error){
-            if(error.code === 11000) {
-                res.status(409).json({ message: 'User already in use' });
-            }
-            res.status(500).json({ message: 'Internal server error' })
+
+        //Geração do token
+        const token = jwt.sign({ userId: user._id }, jwtSecret);
+        //Definir o token no cookie
+        res.cookie('token', token, { httpOnly: true });
+        //Redirecionar para a área restrita (por exemplo, dashboard)
+        res.redirect('/dashboard');
+
+        //res.status(201).json({ message: 'User Created', user }); //Este é o codigo original do projeto 
+    
+    //Minhas Modificações    
+    } catch (error) {
+        if (error.code === 11000) {
+            // Renderizar a página de registro com uma mensagem de erro
+            const locals = {
+                title: "Admin",
+                description: "Simple Blog created with NodeJs, Express & MongoDb.",
+                errorMessage: 'Username already in use. Please choose a different username.'
+            };
+            return res.render('admin/index', { locals, layout: adminLayout });
         }
+        // Renderizar a página de registro com uma mensagem de erro genérica
+        const locals = {
+            title: "Admin",
+            description: "Simple Blog created with NodeJs, Express & MongoDb.",
+            errorMessage: 'An error occurred. Please try again later.'
+        };
+        return res.render('admin/index', { locals, layout: adminLayout });
+    }
+        
+        //} catch (error){
+        //    if(error.code === 11000) {
+        //        res.status(409).json({ message: 'User already in use' });
+        //    }
+        //    res.status(500).json({ message: 'Internal server error' })
+        //}
        
         } catch (error){
         console.log(error);
     }
 });
-
-
-
-
-
 
 
 

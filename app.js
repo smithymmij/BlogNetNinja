@@ -10,6 +10,7 @@ const connectDB = require('./server/config/db');
 const { isActiveRoute } = require('./server/helpers/routeHelpers');
 const session = require('express-session');
 
+
 const app = express();
 const PORT = 5000 || process.env.PORT;
 

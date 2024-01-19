@@ -25,3 +25,26 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 })
+
+
+
+//Codigo para limpar histórico de login
+document.addEventListener('DOMContentLoaded', function () {
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    // Armazenar os valores iniciais dos campos de entrada
+    let initialUsernameValue = usernameInput.value;
+    let initialPasswordValue = passwordInput.value;
+
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            // Verificar se a navegação foi feita através do histórico do navegador
+            // Se sim, limpar os campos de entrada
+            if (window.performance && window.performance.navigation.type === 2) {
+                usernameInput.value = initialUsernameValue;
+                passwordInput.value = initialPasswordValue;
+            }
+        }
+    });
+});
