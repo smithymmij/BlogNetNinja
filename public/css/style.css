@@ -86,6 +86,7 @@ img {
 .header {
     display: grid;
     align-items: center;
+    justify-content: center;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     padding-top: 10px;
@@ -273,6 +274,11 @@ img {
 
 /*SearchBar*/
 .searchBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+/*checar daqui pra cima*/
+    
     visibility: hidden;
     transform: translateY(-100px);
     background-color: var(--black);
@@ -300,6 +306,7 @@ img {
     padding: 15px;
 }
 
+.search__form {width: 65vw;} /*precisaaaaaaaa checar eu que fizzzzzzzzzzzzzzzzzzzzzz*/
 
 /* Dashboard Admin */
 .admin-title {

@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function(){
             searchBar.classList.add('open');
             this.setAttribute('aria-expanded', 'true');
             searchInput.focus();
+            searchBar.style.width = ''; // Ajuste o tamanho conforme necessário
+            searchBar.style.height = '60px'; // Ajuste a altura conforme necessário
+
 
         });
     }
@@ -20,6 +23,9 @@ document.addEventListener('DOMContentLoaded', function(){
             searchBar.style.visibility = 'hidden';
             searchBar.classList.remove('open');
             this.setAttribute('aria-expanded', 'false');
+            searchBar.style.width = ''; // Remove a largura personalizada
+            searchBar.style.height = ''; // Remove a altura personalizada
+    
             
         });
 

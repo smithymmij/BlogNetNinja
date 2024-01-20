@@ -15,8 +15,6 @@ const app = express();
 const PORT = 5000 || process.env.PORT;
 
 
-
-
 //Connect to DB
 connectDB();
 
