@@ -9,7 +9,6 @@ const adminLayout = '../views/layouts/admin';
 const jwtSecret = process.env.JWT_SECRET;
 
 
-
 /**
  * 
  * Check Login
@@ -21,10 +20,6 @@ const authMiddleware = (req, res, next) => {
         return res.redirect('/admin'); // Redirecionar para a página de login
     }
 
-    //if(!token) {
-    //    return res.status(401).json( { message: Unauthorized } );
-    //}
-
     try {
         const decoded = jwt.verify(token, jwtSecret);
         req.userId = decoded.userId;
@@ -33,29 +28,19 @@ const authMiddleware = (req, res, next) => {
         const now = Math.floor(Date.now() / 1000); // Tempo atual em segundos
         const expiresAt = decoded.exp; // Tempo de expiração do token
         const timeRemaining = expiresAt - now;
-
+        
         
         if (timeRemaining < 60) {
             // Se o token estiver prestes a expirar (menos de 60 segundos restantes), redirecione para a página de login
             return res.redirect('/admin');
         }
 
-
         next();
 
     } catch (error) {
         return res.redirect('/admin'); // Redirecionar para a página de login em caso de token inválido
     }
-
-    //}   catch(error) {
-    //    return res.status(401).json( { message: Unauthorized } );
-   // }
-
 }
-
-
-
-
 
 
 /**
@@ -96,14 +81,10 @@ router.post('/admin', async (req, res) => {
             };
             return res.render('admin/index', { locals, layout: adminLayout });
         }
-
-        //if(!user) {
-        //    return res.status(401).json( { message: 'Invalid credentials' } );
-        //}
         
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        //Minhas Alterações
+        //Alterações nas mensagens de erro login, na pagina
         if(!isPasswordValid) {
             // Renderizar a página de login com uma mensagem de erro
             const locals = {
@@ -113,16 +94,12 @@ router.post('/admin', async (req, res) => {
             };
             return res.render('admin/index', { locals, layout: adminLayout });
         }
-
-        //if(!isPasswordValid) {
-        //    return res.status(401).json( { message: 'Invalid credentials' } );
-        //}
         
         const token = jwt.sign({ userId: user._id }, jwtSecret)
         res.cookie('token', token, { httpOnly: true });
         res.redirect('/dashboard');
 
-    //Minhas Alterações    
+    //Mais alterações para mensagens de erro   
     } catch (error){
         console.log(error);
         // Renderizar a página de login com uma mensagem de erro genérica
@@ -133,10 +110,6 @@ router.post('/admin', async (req, res) => {
         };
         return res.render('admin/index', { locals, layout: adminLayout });
     }
-
-    //} catch (error){
-    //    console.log(error);
-    //}
 });
 
 
@@ -148,7 +121,8 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
     try {
         const locals = {
             title: "dashboard",
-            description: "Simple Blog created with NodeJs, Express & MongoDb."
+            description: "Simple Blog created with NodeJs, Express & MongoDb.",
+           
     }
         const data = await Post.find();
         res.render('admin/dashboard', {
@@ -219,8 +193,7 @@ router.get('/edit-post/:id', authMiddleware, async (req, res) => {
             title: "Edit Post",
             description: "Free NodeJs User Management System",
     };
-
-        
+      
         const data = await Post.findOne({ _id: req.params.id });
 
        res.render('admin/edit-post', {
@@ -249,12 +222,13 @@ router.put('/edit-post/:id', authMiddleware, async (req, res) => {
         updatedAt: Date.now()
        });
 
-       res.redirect(`/edit-post/${req.params.id}`);
+       res.redirect(`/post/${req.params.id }`);
 
     } catch (error) {
         console.log(error)
     }
 });
+
 
 
 /**
@@ -316,9 +290,7 @@ router.post('/register', async (req, res) => {
         res.cookie('token', token, { httpOnly: true });
         //Redirecionar para a área restrita (por exemplo, dashboard)
         res.redirect('/dashboard');
-
-        //res.status(201).json({ message: 'User Created', user }); //Este é o codigo original do projeto 
-    
+  
     //Minhas Modificações    
     } catch (error) {
         if (error.code === 11000) {
@@ -338,22 +310,10 @@ router.post('/register', async (req, res) => {
         };
         return res.render('admin/index', { locals, layout: adminLayout });
     }
-        
-        //} catch (error){
-        //    if(error.code === 11000) {
-        //        res.status(409).json({ message: 'User already in use' });
-        //    }
-        //    res.status(500).json({ message: 'Internal server error' })
-        //}
-       
+             
         } catch (error){
         console.log(error);
     }
 });
-
-
-
-
-
 
 module.exports = router;

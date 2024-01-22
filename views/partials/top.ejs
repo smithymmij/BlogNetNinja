@@ -1,0 +1,19 @@
+<div class="top">
+    <div class="header__button">
+        <a href="/admin">
+            Login
+        </a>
+        
+        
+    </div>
+    <div class="user-info">
+        <% if (locals.user) { %>
+            <p>Bem-vindo, <%= locals.user.username %></p>
+        <% } else { %>
+            <p>Bem-vindo, Convidado</p>
+        <% } %>
+    </div>
+    
+    
+    
+</div>

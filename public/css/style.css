@@ -62,6 +62,18 @@ img {
 }
 
 
+/*Topo para exibir status de login sim/não*/
+.top {
+     display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 4px 0;
+    left: 0;
+    right: 0;
+    padding-right: 2rem;
+}
+
+
 /*Layout*/
 .container {
     max-width: 982px;
@@ -81,6 +93,7 @@ img {
     overflow: hidden;
     border-radius: var(--border-radius);
 }
+
 
 /*Main header*/
 .header {
@@ -144,6 +157,7 @@ img {
 .header__button button:hover {
     border: 2px solid var(--black);
 }
+
 
 /*Header -> Navegation*/
 .header__nav ul {
@@ -277,8 +291,6 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-/*checar daqui pra cima*/
-    
     visibility: hidden;
     transform: translateY(-100px);
     background-color: var(--black);
@@ -306,7 +318,9 @@ img {
     padding: 15px;
 }
 
-.search__form {width: 65vw;} /*precisaaaaaaaa checar eu que fizzzzzzzzzzzzzzzzzzzzzz*/
+.search__form {
+    width: 65vw;
+} 
 
 /* Dashboard Admin */
 .admin-title {
@@ -321,8 +335,7 @@ img {
   }
   
   .admin-post-controls form {
-    display: inline-block;
-    
+    display: inline-block; 
   }
   
   .admin-post-controls .btn  {
@@ -343,7 +356,7 @@ img {
   }
   
 
-  /*testando caixa de login*/
+/*Admin Login / alinha as caixas de login lado a lado*/
 .admin-panel {
     display: flex;
     flex-direction: row;

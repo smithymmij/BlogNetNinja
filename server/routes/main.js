@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 
+
+
 /**
  * GET /
  * HOME
@@ -13,6 +15,7 @@ router.get('', async (req, res) => {
             description: "Simple Blog created with NodeJs, Express & MongoDb."
         }
 
+         
         let perPage = 6;
         let page = req.query.page || 1;
 
@@ -32,6 +35,8 @@ router.get('', async (req, res) => {
             nextPage: hasNextPage ? nextPage : null,
             currentRoute: '/'
         });
+
+          
     } catch (error){
         console.log(error);
     }
@@ -53,9 +58,6 @@ router.get('', async (req, res) => {
 //});
 
 
-
-
-
 /**
  * GET /
  * Post :id
@@ -71,7 +73,6 @@ router.get('/post/:id', async (req, res) => {
             description: "Simple Blog created with NodeJs, Express & MongoDb.",
             currentRoute: `/post/${slug}`
         }
-
 
         res.render('post', { 
             locals, 
@@ -115,16 +116,13 @@ router.post('/search', async (req, res) => {
     } catch (error){
         console.log(error);
     }
-
 });
-
 
 router.get('/about', (req, res) => {
     res.render('about', {
         currentRoute: '/about'
     })
 })
-
 
 
 // function insertPostData () {
@@ -173,8 +171,5 @@ router.get('/about', (req, res) => {
 // }
 
 // insertPostData();
-
-
-
 
 module.exports = router;

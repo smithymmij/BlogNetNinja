@@ -5,47 +5,51 @@ const expressLayout = require('express-ejs-layouts');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
+const session = require('express-session');
+
+const nocache = require('nocache');//estou testando para o caheee
 
 const connectDB = require('./server/config/db');
 const { isActiveRoute } = require('./server/helpers/routeHelpers');
-const session = require('express-session');
-
 
 const app = express();
-const PORT = 5000 || process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
-
-//Connect to DB
+// Connect to DB
 connectDB();
+
+app.use(nocache());//estou testando para o caheee
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(methodOverride('_method'));
 
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI
-    }),
-    //cookie: { maxAge: new Date ( Date.now() + (3600000) ) } 
-}));
+
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET || 'keyboard cat',
+        resave: false,
+        saveUninitialized: true,
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGODB_URI
+        }),
+        cookie: { maxAge: 10 * 60 * 1000 } // 10 minutos em milissegundos
+    })
+);
 
 app.use(express.static('public'));
 
-//Templating Engine
+// Templating Engine
 app.use(expressLayout);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');
-
 
 app.locals.isActiveRoute = isActiveRoute;
 
 app.use('/', require('./server/routes/main'));
 app.use('/', require('./server/routes/admin'));
 
-app.listen(PORT, ()=> {
+app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
 });
