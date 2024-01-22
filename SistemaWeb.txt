@@ -1,0 +1,58 @@
+C:\NodeProjects
+cd MinhaPasta
+node -v
+clear
+npm init -y
+
+npm i bcrypt connect-mongo cookie-parser dotenv ejs express express-ejs-layouts express-session jsonwebtoken method-override mongoose
+
+clear
+
+npm i nodemon --save-dev
+
+code .
+
+//criar pasta as pastas listadas abaixo dentro de: "blognetninja"
+
+.gitignore
+	"node_modules/
+	.env"
+.env
+app.js
+
+//abrir pasta "package.json" e fazer alterações abaixo:
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "app.js",
+    "dev": "nodemon app.js"
+  },
+
+//codigos em "app.js"
+
+
+//no terminal ou no power shel:
+npm run dev
+
+//Enviando projeto para o github
+cd caminho/do/seu/projeto
+
+(
+git add .
+git commit -m "Aula 2, parei na criação das divs"
+)
+
+git init
+git add .
+git commit -m "Primeiro commit" //Desvrever as mudanças entre aspas
+git remote add origin https://github.com/smithymmij/BlogNetNinja.git
+git push -u origin master
+
+//caso dê erro
+git remote -v
+git remote add origin https://github.com/smithymmij/BlogNetNinja.git
+git push -u origin master
+
+
+
+http://192.168.1.3:5000/
+
