@@ -62,7 +62,7 @@ router.get('/admin', async (req, res) => {
 router.post('/admin', async (req, res) => {
     try {
         const { username, password } = req.body;
-        const user = await User.findOne( { username } );       
+        const user = await User.findOne( { username } ); 
         //Minhas Alterações
         if(!user) {
             // Renderizar a página de login com uma mensagem de erro
@@ -84,21 +84,24 @@ router.post('/admin', async (req, res) => {
             };
             return res.render('admin/index', { locals, layout: adminLayout });
         }
-        const token = jwt.sign({ userId: user._id }, jwtSecret)
+
+        const token = jwt.sign({ userId: user._id }, jwtSecret) 
         res.cookie('token', token, { httpOnly: true });
         res.redirect('/dashboard');
     //Mais alterações para mensagens de erro   
     } catch (error){
         console.log(error);
+
         // Renderizar a página de login com uma mensagem de erro genérica
         const locals = {
             title: "Admin",
-            description: "Simple Blog created with NodeJs, Express & MongoDb.",
+            description: "Simple Blog created with NodeJs, Express & MongoDb.",            
             errorMessage: 'An error occurred. Please try again later.'
         };
         return res.render('admin/index', { locals, layout: adminLayout });
     }
 });
+
 
 
 /**
