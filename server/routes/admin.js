@@ -15,11 +15,9 @@ const jwtSecret = process.env.JWT_SECRET;
  */
 const authMiddleware = (req, res, next) => {
     const token = req.cookies.token;
-
     if (!token) {
         return res.redirect('/admin'); // Redirecionar para a página de login
     }
-
     try {
         const decoded = jwt.verify(token, jwtSecret);
         req.userId = decoded.userId;
@@ -28,15 +26,12 @@ const authMiddleware = (req, res, next) => {
         const now = Math.floor(Date.now() / 1000); // Tempo atual em segundos
         const expiresAt = decoded.exp; // Tempo de expiração do token
         const timeRemaining = expiresAt - now;
-        
-        
+       
         if (timeRemaining < 60) {
             // Se o token estiver prestes a expirar (menos de 60 segundos restantes), redirecione para a página de login
             return res.redirect('/admin');
         }
-
         next();
-
     } catch (error) {
         return res.redirect('/admin'); // Redirecionar para a página de login em caso de token inválido
     }
@@ -53,7 +48,6 @@ router.get('/admin', async (req, res) => {
             title: "Admin",
             description: "Simple Blog created with NodeJs, Express & MongoDb."
         }
-        
         res.render('admin/index', { locals, layout: adminLayout });
     } catch (error){
         console.log(error);
@@ -68,9 +62,7 @@ router.get('/admin', async (req, res) => {
 router.post('/admin', async (req, res) => {
     try {
         const { username, password } = req.body;
-        
-        const user = await User.findOne( { username } );
-
+        const user = await User.findOne( { username } );       
         //Minhas Alterações
         if(!user) {
             // Renderizar a página de login com uma mensagem de erro
@@ -81,9 +73,7 @@ router.post('/admin', async (req, res) => {
             };
             return res.render('admin/index', { locals, layout: adminLayout });
         }
-        
         const isPasswordValid = await bcrypt.compare(password, user.password);
-
         //Alterações nas mensagens de erro login, na pagina
         if(!isPasswordValid) {
             // Renderizar a página de login com uma mensagem de erro
@@ -94,11 +84,9 @@ router.post('/admin', async (req, res) => {
             };
             return res.render('admin/index', { locals, layout: adminLayout });
         }
-        
         const token = jwt.sign({ userId: user._id }, jwtSecret)
         res.cookie('token', token, { httpOnly: true });
         res.redirect('/dashboard');
-
     //Mais alterações para mensagens de erro   
     } catch (error){
         console.log(error);
@@ -270,6 +258,8 @@ router.get('/logout', (req, res) => {
 //        console.log(error);
 //    }
 //});
+
+
 
 
 /**

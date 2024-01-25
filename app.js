@@ -7,10 +7,15 @@ const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
 const session = require('express-session');
 
-const nocache = require('nocache');//estou testando para o caheee
+//inicio do teste
 
+//fim do teste
+
+
+const nocache = require('nocache');//estou testando para o caheee
 const connectDB = require('./server/config/db');
 const { isActiveRoute } = require('./server/helpers/routeHelpers');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,17 +31,8 @@ app.use(cookieParser());
 app.use(methodOverride('_method'));
 
 
-app.use(
-    session({
-        secret: process.env.SESSION_SECRET || 'keyboard cat',
-        resave: false,
-        saveUninitialized: true,
-        store: MongoStore.create({
-            mongoUrl: process.env.MONGODB_URI
-        }),
-        cookie: { maxAge: 10 * 60 * 1000 } // 10 minutos em milissegundos
-    })
-);
+
+
 
 app.use(express.static('public'));
 
@@ -53,3 +49,6 @@ app.use('/', require('./server/routes/admin'));
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
 });
+
+
+
