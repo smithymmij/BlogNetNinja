@@ -7,9 +7,6 @@ const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
 const session = require('express-session');
 
-//inicio do teste
-
-//fim do teste
 
 
 const nocache = require('nocache');//estou testando para o caheee
@@ -31,6 +28,11 @@ app.use(cookieParser());
 app.use(methodOverride('_method'));
 
 
+//inicio do teste
+
+
+
+//fim do teste
 
 
 

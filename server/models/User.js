@@ -13,4 +13,8 @@ const UserSchema = new Schema({
     }
 });
 
+//inicio do teste
+
+//fim do teste
+
 module.exports = mongoose.model('User', UserSchema);
